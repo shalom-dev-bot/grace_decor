@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=grace
+      - POSTGRES_USER=grace_user
+      - POSTGRES_PASSWORD=grace123
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - media_files:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DB_HOST=db
+      - DB_NAME=grace
+      - DB_USER=grace_user
+      - DB_PASSWORD=grace123
+      - DB_PORT=5432
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  media_files: 
