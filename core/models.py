@@ -33,9 +33,14 @@ class CustomUser(AbstractUser):
     email_verified = models.BooleanField(default=False)
     phone_verified = models.BooleanField(default=False)
     last_login_ip = models.GenericIPAddressField(blank=True, null=True)
+    activation_token = models.CharField(max_length=128, blank=True, null=True)  # Ajout pour l'activation
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+# ...existing code...
+    last_login_ip = models.GenericIPAddressField(blank=True, null=True)
+    activation_token = models.CharField(max_length=128, blank=True, null=True)  # Ajout pour l'activation
+    created_at = models.DateTimeField(auto_now_add=True)
+# ...existing code...
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
