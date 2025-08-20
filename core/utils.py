@@ -14,8 +14,16 @@ def confirm_activation_token(token, expiration=3600):
         return None
     return email
 
-def send_activation_email(user_email, token):
-    activation_link = f"http://127.0.0.1:8000/api/core/activate/{token}/"
-    subject = "Activate your Glow Gracious Events account"
-    message = f"Click the link to activate your account: {activation_link}"
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
+def send_activation_email(user):
+    # Generate and persist activation token on the user
+    token = generate_activation_token(user.email)
+    user.activation_token = token
+    user.is_active = False
+    user.email_verified = False
+    user.save()
+
+    frontend_base = getattr(settings, 'FRONTEND_BASE_URL', 'http://localhost:5173')
+    activation_link = f"{frontend_base}/activate/{token}"
+    subject = "Activez votre compte Glow Gracious Events"
+    message = f"Cliquez sur le lien pour activer votre compte : {activation_link}"
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])

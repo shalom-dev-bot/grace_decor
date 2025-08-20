@@ -207,6 +207,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Grace Events <noreply@graceevents.com>')
 
+# Frontend URL used in activation links (fallback to localhost)
+FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:5173')
+
 # Security settings for production
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True

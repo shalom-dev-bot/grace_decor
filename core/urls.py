@@ -10,6 +10,7 @@ urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('profile/', UserProfileView.as_view(), name='profile'),
+    path('profile/update/', UserProfileView.as_view(), name='profile-update'),
     path('profile/upload-image/', UserProfileImageView.as_view(), name='profile-upload-image'),
     path('activate/<str:token>/', activate_account, name='activate'),
     path('change-password/', change_password, name='change-password'),

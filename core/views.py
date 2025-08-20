@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import CustomUser
 from .serializers import UserSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import send_activation_email
 from rest_framework.views import APIView
 from .utils import confirm_activation_token
@@ -34,7 +34,7 @@ class UserRegistrationView(APIView):
             user = serializer.save()
             send_activation_email(user)
             return Response({
-                'message': 'User registered successfully. Please check your email to activate your account.'
+                'message': 'Inscription réussie. Veuillez vérifier votre email pour activer votre compte.'
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,8 +69,13 @@ class UserLoginView(APIView):
         user.last_login_ip = ip
         user.save()
         
+        refresh = RefreshToken.for_user(user)
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': serializer.data
+        })
 
 class UserProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]

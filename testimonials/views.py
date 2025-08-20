@@ -35,14 +35,14 @@ class TestimonialViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(client=self.request.user)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
     def public(self, request):
         """Récupérer les témoignages publics (approuvés)"""
         testimonials = Testimonial.objects.filter(status='approved').order_by('-is_featured', '-created_at')
         serializer = self.get_serializer(testimonials, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
     def featured(self, request):
         """Récupérer les témoignages mis en avant"""
         testimonials = Testimonial.objects.filter(status='approved', is_featured=True).order_by('-created_at')
